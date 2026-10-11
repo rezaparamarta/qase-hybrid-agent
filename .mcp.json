@@ -1,0 +1,22 @@
+{
+  "mcpServers": {
+    "qase": {
+      "command": "cmd",
+      "args": ["/c", "npx", "--no-install", "@qase/mcp-server"],
+      "env": {
+        "QASE_API_TOKEN": "${QASE_API_TOKEN}"
+      }
+    },
+    "playwright": {
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "@playwright/mcp@latest",
+        "--output-dir",
+        "./evidence/mcp"
+      ]
+    }
+  }
+}

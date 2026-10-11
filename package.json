@@ -1,0 +1,22 @@
+{
+  "name": "qase-hybrid-agent",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Hybrid QA: AI agent executes Qase test cases via Playwright MCP, then generates permanent Playwright specs for regression.",
+  "scripts": {
+    "test": "playwright test",
+    "test:qase": "cross-env QASE_MODE=testops playwright test",
+    "test:headed": "playwright test --headed",
+    "report": "playwright show-report",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.0",
+    "@qase/mcp-server": "^2.7.5",
+    "@types/node": "^26.6.5",
+    "cross-env": "^10.1.0",
+    "dotenv": "^18.0.7",
+    "playwright-qase-reporter": "^2.7.0",
+    "typescript": "^7.0.2"
+  }
+}

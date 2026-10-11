@@ -43,8 +43,14 @@ Project code comes from `QASE_PROJECT` in `.env` (default `SDEMO`). App URL come
   [AI explore] <one-line verdict>
   Step <n>: <actual observation>   (only for failed/blocked steps)
   ```
-- Send per-step status in the result when the Qase MCP supports it. Attach screenshots when the
-  Qase MCP can upload attachments; otherwise list the local evidence paths in the comment.
+- **Evidence goes on the step, never on the result.** Upload each step's screenshot with the
+  Qase attachment upload tool, take the returned hash, and put it in that step's
+  `attachments` inside `steps[]` (with `position`, `status`, `comment`). Leave the
+  result-level `attachments` empty and never embed images or image links in any comment.
+  A step with an expected result gets exactly one screenshot; a step without one gets none.
+- If the result tool does not accept per-step attachments, send the raw Qase API call
+  `POST /result/{project}/{run_id}` with the `steps[].attachments` payload instead. Do not
+  fall back to result-level attachments.
 - Start a fresh browser context per case so cases stay independent.
 
 ## Rules for the codify phase

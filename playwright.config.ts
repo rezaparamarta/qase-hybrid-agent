@@ -14,13 +14,13 @@ export default defineConfig({
   expect: { timeout: 5_000 },
   fullyParallel: true,
   retries: process.env.CI ? 1 : 0,
-  workers: process.env.CI ? 2 : undefined, // full parallelism exhausted browser resources (SDEMO-4)
+  workers: 2, // full parallelism exhausted browser resources (SDEMO-4)
 
   use: {
     baseURL: process.env.BASE_URL ?? 'https://www.saucedemo.com',
     // SauceDemo uses data-test="..." attributes, so getByTestId() reads those.
     testIdAttribute: 'data-test',
-    screenshot: 'on', // every result carries a screenshot as evidence
+    screenshot: 'only-on-failure', // per-step evidence comes from stepEvidence() in each spec
     trace: 'retain-on-failure',
   },
 

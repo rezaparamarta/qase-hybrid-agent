@@ -21,7 +21,8 @@ Run the hybrid explore + codify flow described in `CLAUDE.md` for: `$ARGUMENTS`
    c. After each step with an expected result: snapshot, compare, screenshot to
       `evidence/<RUN_ID>/<CASE_ID>/step-<n>.png`.
    d. Decide the status using the table in `CLAUDE.md`. Record the result in the run with the
-      comment format from `CLAUDE.md`, per-step statuses, and evidence.
+      comment format from `CLAUDE.md` and per-step statuses, each step carrying its own screenshot
+      (never result-level attachments).
    e. If `passed` or `failed`: write the spec per the codify rules, then verify it with
       `npx playwright test <file> --reporter=list` and reconcile as `CLAUDE.md` says.
 4. **Complete the Qase run.**

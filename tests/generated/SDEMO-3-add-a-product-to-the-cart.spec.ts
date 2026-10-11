@@ -1,5 +1,9 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter';
+
+async function stepEvidence(page: Page, name: string) {
+  qase.attach({ name: `${name}.png`, content: await page.screenshot(), contentType: 'image/png' });
+}
 
 test(qase(3, 'Add a product to the cart'), async ({ page }) => {
   // Precondition: logged in as "standard_user", cart is empty (fresh browser context).
@@ -15,10 +19,12 @@ test(qase(3, 'Add a product to the cart'), async ({ page }) => {
   await test.step('On the Products page, click "Add to cart" on "Sauce Labs Backpack"', async () => {
     await backpack.getByRole('button', { name: 'Add to cart' }).click();
     await expect(backpack.getByRole('button', { name: 'Remove' })).toBeVisible();
+    await stepEvidence(page, 'step-1');
   });
 
   await test.step('Look at the cart icon in the header', async () => {
     await expect(page.getByTestId('shopping-cart-badge')).toHaveText('1');
+    await stepEvidence(page, 'step-2');
   });
 
   await test.step('Click the cart icon', async () => {
@@ -28,5 +34,6 @@ test(qase(3, 'Add a product to the cart'), async ({ page }) => {
     await expect(items).toHaveCount(1);
     await expect(items.getByTestId('inventory-item-name')).toHaveText('Sauce Labs Backpack');
     await expect(items.getByTestId('item-quantity')).toHaveText('1');
+    await stepEvidence(page, 'step-3');
   });
 });

@@ -1,5 +1,9 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter';
+
+async function stepEvidence(page: Page, name: string) {
+  qase.attach({ name: `${name}.png`, content: await page.screenshot(), contentType: 'image/png' });
+}
 
 test(qase(4, 'Checkout a single item'), async ({ page }) => {
   // Precondition: logged in as "standard_user", "Sauce Labs Backpack" is in the cart.
@@ -15,6 +19,7 @@ test(qase(4, 'Checkout a single item'), async ({ page }) => {
     await page.getByTestId('shopping-cart-link').click();
     await page.getByRole('button', { name: 'Checkout' }).click();
     await expect(page.getByTestId('title')).toHaveText('Checkout: Your Information');
+    await stepEvidence(page, 'step-1');
   });
 
   await test.step('Fill First Name "Reza", Last Name "Tester", Postal Code "12190" and click "Continue"', async () => {
@@ -25,10 +30,12 @@ test(qase(4, 'Checkout a single item'), async ({ page }) => {
     await expect(page.getByTestId('title')).toHaveText('Checkout: Overview');
     await expect(page.getByTestId('inventory-item-name')).toHaveText(['Sauce Labs Backpack']);
     await expect(page.getByTestId('subtotal-label')).toHaveText('Item total: $29.99');
+    await stepEvidence(page, 'step-2');
   });
 
   await test.step('Click "Finish"', async () => {
     await page.getByRole('button', { name: 'Finish' }).click();
     await expect(page.getByRole('heading', { name: 'Thank you for your order!' })).toBeVisible();
+    await stepEvidence(page, 'step-3');
   });
 });

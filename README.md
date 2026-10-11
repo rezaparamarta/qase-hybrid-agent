@@ -28,9 +28,9 @@ flowchart LR
 | Phase | Who runs it | Command | Output |
 |---|---|---|---|
 | **1. Seed** | Agent → Qase MCP | `/qase-seed` | Suite + test cases created in Qase |
-| **2. Explore** | Agent → Playwright MCP | `/qase-explore suite:<id>` | Qase run with status per step and screenshots |
+| **2. Explore** | Agent → Playwright MCP | `/qase-explore suite:<id>` | Qase run with status and one screenshot per step |
 | **3. Codify** | Agent | (part of `/qase-explore`) | One spec per case, run once to prove it reproduces the explore result |
-| **4. Regression** | Playwright only | `/qase-regress`, `npm run test:qase` or CI | Qase run published by the reporter |
+| **4. Regression** | Playwright only | `/qase-regress`, `npm run test:qase` or CI | Qase run published by the reporter, screenshots per step |
 
 The Qase test case is the **source of truth**. Specs are derived from it, never the reverse.
 
@@ -86,6 +86,11 @@ All rules live in [`CLAUDE.md`](CLAUDE.md). The important ones:
 - **Self-check.** Each generated spec is executed right away and must match the explore outcome
   (pass ↔ pass, fail ↔ fail on the same expected result). Up to 3 fix attempts, then `test.fixme`
   plus a flag for a human.
+- **Evidence lives on the step.** Every step with an expected result carries exactly one
+  screenshot, attached to that step in Qase, never to the result as a whole and never as an image
+  link in a comment. The agent uploads the file and puts the hash in `steps[].attachments`;
+  generated specs call `stepEvidence()` at the end of each step, which the Qase reporter maps onto
+  the same step.
 - **Locator discipline.** `getByRole` → `getByLabel` → `getByPlaceholder` → `getByTestId` → text →
   CSS last. Only selectors seen in real page snapshots. No `waitForTimeout`.
 - **No secrets anywhere.** Passwords and tokens stay in `.env` (locally) or GitHub secrets (CI);
@@ -181,7 +186,7 @@ docs/seed-cases.md         The 5 pilot test cases
 docs/spec-template.ts      The pattern every generated spec follows
 tests/generated/           Generated specs (committed)
 evidence/                  Explore screenshots (git-ignored)
-playwright.config.ts       baseURL, data-test as testId, screenshots on, Qase reporter, 2 workers in CI
+playwright.config.ts       baseURL, data-test as testId, screenshots on failure, Qase reporter, 2 workers
 ```
 
 ---
@@ -194,7 +199,11 @@ playwright.config.ts       baseURL, data-test as testId, screenshots on, Qase re
 - **Search indexes lag.** A freshly created case was briefly missing from Qase search results.
   `/qase-explore` now compares its case list with the suite count and fetches missing cases by ID.
 - **Real browsers are heavy.** Fully parallel runs on a laptop hit `ERR_INSUFFICIENT_RESOURCES`
-  (2 of 5 parallel runs failed in setup; 5 of 5 passed serially). CI is capped at 2 workers.
+  (2 of 5 parallel runs failed in setup; 5 of 5 passed serially). Runs are capped at 2 workers.
+- **Put evidence where the reviewer looks.** Early runs embedded screenshots as image links in the
+  result comment, and Qase rendered them as broken images. Uploading each screenshot and
+  attaching it to its own step fixed that and made each step self-explanatory. Playwright now takes
+  automatic screenshots only on failure; per-step evidence comes from `stepEvidence()`.
 - **Agents click too early, too.** Clicks sent right after a page load were dropped during
   exploration. The agent retried from a fresh state and attached the first attempt as evidence
   instead of hiding it.

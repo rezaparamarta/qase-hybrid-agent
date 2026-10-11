@@ -9,6 +9,9 @@ Run the hybrid explore + codify flow described in `CLAUDE.md` for: `$ARGUMENTS`
    - `1,2,3` → those case IDs
    - `suite:<id>` → all cases in that suite
    - `all` → all cases in the project (if more than 15, list them and ask me before running)
+   - Search results can lag behind newly created cases. Compare the number of cases found with
+     the suite/project case count (from `qase_project_context` or the suite), and fetch any
+     missing case by ID with `qase_get` before creating the run.
 2. **Create a Qase test run** titled `[AI Explore] <YYYY-MM-DD HH:mm>` containing exactly those cases.
    Note the run ID.
 3. **For each case, one at a time:**

@@ -121,7 +121,7 @@ All rules live in [`CLAUDE.md`](CLAUDE.md). The important ones:
 ```powershell
 git clone https://github.com/rezaparamarta/qase-hybrid-agent.git
 cd qase-hybrid-agent
-npm install                      # also installs the Qase MCP server locally
+npm install                      # also installs both MCP servers (Qase, Playwright) locally
 npx playwright install chromium
 copy .env.example .env           # fill in QASE_API_TOKEN and SAUCE_PASSWORD
 ```
@@ -170,7 +170,8 @@ gh secret set SAUCE_PASSWORD
 gh workflow run Regression
 ```
 
-CI stays red on purpose while SDEMO-5's bug exists in SauceDemo: the spec documents a real defect.
+CI runs with `--grep-invert @known-bug`, so specs tagged `@known-bug` (SDEMO-5, a real SauceDemo defect)
+are skipped there; `npm test`, `npm run test:qase` and `/qase-regress` still run them and stay red.
 
 ---
 

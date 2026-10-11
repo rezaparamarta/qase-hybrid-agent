@@ -2,7 +2,12 @@
   "mcpServers": {
     "qase": {
       "command": "cmd",
-      "args": ["/c", "npx", "--no-install", "@qase/mcp-server"],
+      "args": [
+        "/c",
+        "npx",
+        "--no-install",
+        "@qase/mcp-server"
+      ],
       "env": {
         "QASE_API_TOKEN": "${QASE_API_TOKEN}"
       }
@@ -12,8 +17,8 @@
       "args": [
         "/c",
         "npx",
-        "-y",
-        "@playwright/mcp@latest",
+        "--no-install",
+        "@playwright/mcp",
         "--output-dir",
         "./evidence/mcp"
       ]

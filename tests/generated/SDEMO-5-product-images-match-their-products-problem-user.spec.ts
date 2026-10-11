@@ -7,7 +7,7 @@ async function stepEvidence(page: Page, name: string) {
 
 // Known SauceDemo bug: problem_user sees the same image on every product.
 // This spec is expected to stay red until the app is fixed.
-test(qase(5, 'Product images match their products (problem_user)'), async ({ page }) => {
+test(qase(5, 'Product images match their products (problem_user)'), { tag: '@known-bug' }, async ({ page }) => {
   // Precondition: user is logged out (fresh browser context).
 
   await test.step('Log in with username "problem_user" and the valid password', async () => {

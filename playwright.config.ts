@@ -14,6 +14,7 @@ export default defineConfig({
   expect: { timeout: 5_000 },
   fullyParallel: true,
   retries: process.env.CI ? 1 : 0,
+  workers: process.env.CI ? 2 : undefined, // full parallelism exhausted browser resources (SDEMO-4)
 
   use: {
     baseURL: process.env.BASE_URL ?? 'https://www.saucedemo.com',

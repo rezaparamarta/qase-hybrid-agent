@@ -1,0 +1,23 @@
+{
+  "mcpServers": {
+    "qase": {
+      "command": "npx",
+      "args": [
+        "--no-install",
+        "@qase/mcp-server"
+      ],
+      "env": {
+        "QASE_API_TOKEN": "${QASE_API_TOKEN}"
+      }
+    },
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "--no-install",
+        "@playwright/mcp",
+        "--output-dir",
+        "./evidence/mcp"
+      ]
+    }
+  }
+}

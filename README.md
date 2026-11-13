@@ -136,8 +136,8 @@ claude
 
 In Claude Code, run `/mcp`. Both `qase` and `playwright` should show as connected.
 
-> **macOS / Linux:** in `.mcp.json`, replace `"command": "cmd"` with `"command": "npx"` and drop
-> the `"/c", "npx"` items from `args`.
+> **macOS / Linux:** the committed `.mcp.json` uses `cmd /c npx` (Windows). Use the ready-made
+> variant instead: `cp .mcp.macos-linux.json .mcp.json`.
 >
 > **Qase Enterprise:** add `"QASE_API_DOMAIN": "api.<company>.qase.io"` to the `qase` server's
 > `env`, or switch to the hosted server: `{ "type": "http", "url": "https://mcp.qase.io/mcp" }`.
@@ -178,7 +178,9 @@ are skipped there; `npm test`, `npm run test:qase` and `/qase-regress` still run
 ## Project layout
 
 ```
-.mcp.json                  Qase MCP + Playwright MCP
+.mcp.json                  Qase MCP + Playwright MCP (Windows: cmd /c npx)
+.mcp.macos-linux.json      Same servers for macOS / Linux (copy over .mcp.json)
+LICENSE                    MIT
 .env.example               Variables to copy into .env
 CLAUDE.md                  Agent rules: status semantics, evidence, codify rules, safety
 .claude/commands/          /qase-seed, /qase-explore, /qase-regress
@@ -217,6 +219,12 @@ playwright.config.ts       baseURL, data-test as testId, screenshots on failure,
 - [ ] Reuse an authenticated session (`storageState`) for apps behind SSO/OTP
 - [ ] Auto-create a Qase defect for confirmed failures and link it to the result
 - [ ] Pilot on an internal web application (read-only cases first)
+
+---
+
+## License
+
+[MIT](LICENSE)
 
 ---
 

@@ -6,3 +6,4 @@ evidence/*
 !evidence/.gitkeep
 .claude/settings.local.json
 debug.log
+.claude/skills/
